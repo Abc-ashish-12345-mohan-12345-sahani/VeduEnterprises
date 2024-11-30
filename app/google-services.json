@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "6721847486",
+    "project_id": "veduenterprises-eb916",
+    "storage_bucket": "veduenterprises-eb916.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6721847486:android:150a32b0a246f9424b1eef",
+        "android_client_info": {
+          "package_name": "vedu_enterprises.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZChcE3DGwtBf8v2V1ZHhmKBemX7qtAK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
