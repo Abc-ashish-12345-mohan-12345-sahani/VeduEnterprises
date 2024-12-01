@@ -2,18 +2,30 @@ package vedu_enterprises.application.activityies.activity
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
@@ -26,6 +38,8 @@ import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Shield
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,14 +55,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import com.pixplicity.easyprefs.library.Prefs
 import vedu_enterprises.application.Helper.FirebaseAuthHelper
 import vedu_enterprises.application.R
@@ -106,6 +126,7 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item { ProfileHeader() }
+            item { ShowCard() }
             item { SectionTitle(stringResource(R.string.other_information)) }
             item {
                 MenuItemRow(
@@ -130,8 +151,7 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
                     onClick = { logOut(viewModel, authHelper, context) })
             }
             item {
-                MenuItemRow(
-                    icon = Icons.Default.Shield,
+                MenuItemRow(icon = Icons.Default.Shield,
                     stringResource(R.string.privacy_policy),
                     onClick = { })
             }
@@ -158,19 +178,15 @@ fun ProfileHeader() {
         fontWeight = FontWeight.Bold,
         modifier = Modifier.padding(vertical = 16.dp)
     )
-    Text(
-        Prefs.getString(Constants.PHONE).ifEmpty { "No phone number available" },
-        fontSize = 16.sp,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
-    )
 }
 
 @Composable
 fun SectionTitle(title: String) {
+    Spacer(modifier = Modifier.height(10.dp))
     Text(
         title,
         fontSize = 14.sp,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        color = Color.Black,
         modifier = Modifier.padding(vertical = 10.dp)
     )
 }
@@ -180,7 +196,7 @@ fun MenuItemRow(icon: ImageVector, title: String, onClick: () -> Unit) {
     Surface(
         onClick = onClick, modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = 5.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -198,7 +214,7 @@ fun MenuItemRow(icon: ImageVector, title: String, onClick: () -> Unit) {
                 ) {
                     Icon(imageVector = icon, contentDescription = null, Modifier.padding(8.dp))
                 }
-                Text(title, fontSize = 16.sp)
+                Text(title, fontSize = 16.sp, fontFamily = FontFamily.SansSerif)
             }
             Icon(
                 Icons.Default.ChevronRight,
@@ -260,4 +276,67 @@ fun GreetingPreview3() {
     VeduEnterprisesTheme {
         ProfileScreen(AuthenticationViewModel(), FirebaseAuthHelper())
     }
+}
+
+@Composable
+fun ShowCard() {
+    val imageUri = remember { mutableStateOf<Uri?>(null) }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        imageUri.value = uri
+    }
+    Card(
+        modifier = Modifier
+            .height(100.dp)
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.LightGray
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(10.dp)
+                .fillMaxHeight(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer(modifier = Modifier.width(10.dp))
+            Image(
+                painter = rememberAsyncImagePainter(
+                    model = imageUri.value ?: R.drawable.baseline_person_24
+                ),
+                contentDescription = stringResource(R.string.profile_image),
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .border(2.dp, Color.Black, CircleShape)
+                    .clickable {
+                        launcher.launch("image/*")
+                    },
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(30.dp))
+            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+                TextView(text = Prefs.getString(Constants.USERNAME))
+                TextView(text = Prefs.getString(Constants.PHONE))
+            }
+        }
+    }
+}
+
+@Composable
+fun TextView(text: String) {
+    Text(
+        text = text,
+        color = Color.Black,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.padding(top = 8.dp)
+    )
 }
