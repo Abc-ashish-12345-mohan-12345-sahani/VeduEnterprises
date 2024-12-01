@@ -14,14 +14,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,7 +37,6 @@ import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.delay
 import vedu_enterprises.application.R
 import vedu_enterprises.application.ui.theme.Constants
-import vedu_enterprises.application.ui.theme.Utils
 import vedu_enterprises.application.ui.theme.ui.theme.VeduEnterprisesTheme
 
 class SplashActivity : ComponentActivity() {
@@ -48,23 +45,18 @@ class SplashActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             VeduEnterprisesTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val context = LocalContext.current
-                    SplashScreen(innerPadding, context)
-                }
+                SplashScreen()
             }
         }
     }
 }
 
 @Composable
-fun SplashScreen(innerPadding: PaddingValues, context: Context) {
-
+fun SplashScreen() {
+    val context = LocalContext.current
     val isTextVisible = remember { mutableStateOf(false) }
-    val backgroundColor = remember { mutableStateOf(Color.White) }
 
     LaunchedEffect(Unit) {
-        backgroundColor.value = Utils.getRandomLightColor()
         delay(1000)
         isTextVisible.value = true
         delay(2000)
@@ -74,7 +66,7 @@ fun SplashScreen(innerPadding: PaddingValues, context: Context) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundColor.value),
+            .background(Color(0xFFC4EFB1)),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -108,7 +100,7 @@ fun SplashScreen(innerPadding: PaddingValues, context: Context) {
 @Composable
 fun SplashScreenPreview() {
     VeduEnterprisesTheme {
-        SplashScreen(innerPadding = PaddingValues(0.dp), context = LocalContext.current)
+        SplashScreen()
     }
 }
 
