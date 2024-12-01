@@ -48,6 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -74,8 +75,7 @@ class LoginActivity : ComponentActivity() {
             val authHelper = FirebaseAuthHelper()
             val authenticationViewModel: AuthenticationViewModel = viewModel()
             VeduEnterprisesTheme {
-                val context = LocalContext.current
-                ModernLoginPage(context, authenticationViewModel, authHelper)
+                ModernLoginPage(authenticationViewModel, authHelper)
             }
         }
     }
@@ -83,8 +83,9 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun ModernLoginPage(
-    context: Context, viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper
+    viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper
 ) {
+    val context = LocalContext.current
     var isSignIn by remember { mutableStateOf(true) }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -98,6 +99,7 @@ fun ModernLoginPage(
     val isLoading = viewModel.isLoading.value
     val errorMessage = viewModel.errorMessage.value
     val user = viewModel.user.value
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let {
@@ -105,11 +107,8 @@ fun ModernLoginPage(
         }
     }
 
-    val backgroundColor = Utils.getRandomLightColor()
-    val surfaceColor = Color.White
-
     Surface(
-        modifier = Modifier.fillMaxSize(), color = backgroundColor
+        modifier = Modifier.fillMaxSize(), color = Color(0xFFC4EFB1)
     ) {
         Column(
             modifier = Modifier
@@ -128,7 +127,7 @@ fun ModernLoginPage(
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = surfaceColor)
+                colors = CardDefaults.cardColors(containerColor = Color.White)
             ) {
                 Column(
                     modifier = Modifier
@@ -261,6 +260,7 @@ fun ModernLoginPage(
                     } else {
                         Button(
                             onClick = {
+                                keyboardController?.hide()
                                 if (validateFields(
                                         email,
                                         password,
@@ -335,7 +335,7 @@ fun ModernLoginPage(
 @Composable
 fun LoginScreenPreview() {
     VeduEnterprisesTheme {
-        ModernLoginPage(LocalContext.current, AuthenticationViewModel(), FirebaseAuthHelper())
+        ModernLoginPage(AuthenticationViewModel(), FirebaseAuthHelper())
     }
 }
 

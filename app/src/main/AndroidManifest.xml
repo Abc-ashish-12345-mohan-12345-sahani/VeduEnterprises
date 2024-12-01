@@ -18,7 +18,6 @@
         <activity
             android:name=".activityies.activity.ProfileActivity"
             android:exported="false"
-            android:label="@string/title_activity_profile"
             android:theme="@style/Theme.VeduEnterprises" />
         <activity
             android:name=".activityies.activity.PreviewActivity"
@@ -27,7 +26,6 @@
         <activity
             android:name=".activityies.activity.SplashActivity"
             android:exported="true"
-            android:label="@string/title_activity_splash"
             android:theme="@style/Theme.VeduEnterprises">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +36,6 @@
         <activity
             android:name=".activityies.activity.MainActivity"
             android:exported="false"
-            android:label="@string/title_activity_login"
             android:theme="@style/Theme.VeduEnterprises" />
         <activity
             android:name=".activityies.activity.LoginActivity"

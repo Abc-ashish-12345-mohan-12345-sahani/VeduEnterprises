@@ -1,3 +1,8 @@
 package vedu_enterprises.application.dataClass
 
-data class PostData(val username: String, val imageResId: Int)
+import androidx.compose.ui.graphics.Color
+
+data class NavigationItem(
+    val title: String,
+    val backgroundColor: Color
+)

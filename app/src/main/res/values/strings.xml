@@ -30,4 +30,15 @@
     <string name="title_activity_preview">PreviewActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="save">Save</string>
+    <string name="profile">Profile</string>
+    <string name="other_information">OTHER INFORMATION</string>
+    <string name="my_account">My account</string>
+    <string name="are_you_sure_you_want_to_delete_your_account_this_action_cannot_be_undone">Are you sure you want to delete your account? This action cannot be undone.</string>
+    <string name="logout">"Logout"</string>
+    <string name="privacy_policy">"Privacy Policy</string>
+    <string name="contact_us">"Contact Us"</string>
+    <string name="delete_account">"Delete Account"</string>
+    <string name="share_app">"Share app"</string>
+    <string name="about_us">"About us"</string>
+    <string name="notification_preferences">"Notification preferences"</string>
 </resources>
