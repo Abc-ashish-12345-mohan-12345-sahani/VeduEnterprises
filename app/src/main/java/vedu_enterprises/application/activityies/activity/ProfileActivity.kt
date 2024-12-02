@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -27,11 +28,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Share
@@ -74,6 +75,7 @@ import vedu_enterprises.application.Helper.FirebaseAuthHelper
 import vedu_enterprises.application.R
 import vedu_enterprises.application.ViewModels.AuthenticationViewModel
 import vedu_enterprises.application.ui.theme.Constants
+import vedu_enterprises.application.ui.theme.Gray10
 import vedu_enterprises.application.ui.theme.Utils
 import vedu_enterprises.application.ui.theme.VeduEnterprisesTheme
 
@@ -114,7 +116,7 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
         TopAppBar(title = { Text(stringResource(R.string.profile), fontSize = 18.sp) },
             navigationIcon = {
                 IconButton(onClick = { (context as? ComponentActivity)?.finish() }) {
-                    Icon(Icons.Default.ArrowBack, "Back")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                 }
             })
     }) { paddingValues ->
@@ -126,17 +128,15 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             item { ProfileHeader() }
-            item { ShowCard() }
+            item { ShowCard(context, viewModel, authHelper) }
             item { SectionTitle(stringResource(R.string.other_information)) }
             item {
-                MenuItemRow(
-                    icon = Icons.Default.Share,
+                MenuItemRow(icon = Icons.Default.Share,
                     stringResource(R.string.share_app),
                     onClick = {})
             }
             item {
-                MenuItemRow(
-                    icon = Icons.Default.Info,
+                MenuItemRow(icon = Icons.Default.Info,
                     stringResource(R.string.about_us),
                     onClick = {})
             }
@@ -146,7 +146,7 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
                     onClick = { })
             }
             item {
-                MenuItemRow(icon = Icons.Default.Logout,
+                MenuItemRow(icon = Icons.AutoMirrored.Filled.Logout,
                     title = stringResource(R.string.logout),
                     onClick = { logOut(viewModel, authHelper, context) })
             }
@@ -156,8 +156,7 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
                     onClick = { })
             }
             item {
-                MenuItemRow(
-                    icon = Icons.Default.Phone,
+                MenuItemRow(icon = Icons.Default.Phone,
                     stringResource(R.string.contact_us),
                     onClick = { })
             }
@@ -184,10 +183,7 @@ fun ProfileHeader() {
 fun SectionTitle(title: String) {
     Spacer(modifier = Modifier.height(10.dp))
     Text(
-        title,
-        fontSize = 14.sp,
-        color = Color.Black,
-        modifier = Modifier.padding(vertical = 10.dp)
+        title, fontSize = 14.sp, color = Color.Black, modifier = Modifier.padding(vertical = 10.dp)
     )
 }
 
@@ -279,20 +275,25 @@ fun GreetingPreview3() {
 }
 
 @Composable
-fun ShowCard() {
+fun ShowCard(context: Context, viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper) {
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         imageUri.value = uri
+        viewModel.uploadUserImage(context, uri!!, authHelper, onSuccess = {
+            Log.d("ShowCard", "Image uploaded successfully: $it")
+        }, onError = {
+            Log.e("ShowCard", "Image upload failed: $it")
+        })
     }
     Card(
         modifier = Modifier
             .height(100.dp)
             .fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.LightGray
+            containerColor = Gray10
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
@@ -306,10 +307,9 @@ fun ShowCard() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Spacer(modifier = Modifier.width(10.dp))
-            Image(
-                painter = rememberAsyncImagePainter(
-                    model = imageUri.value ?: R.drawable.baseline_person_24
-                ),
+            Image(painter = rememberAsyncImagePainter(
+                model = imageUri.value ?: R.drawable.baseline_person_24
+            ),
                 contentDescription = stringResource(R.string.profile_image),
                 modifier = Modifier
                     .size(48.dp)
@@ -317,11 +317,20 @@ fun ShowCard() {
                     .border(2.dp, Color.Black, CircleShape)
                     .clickable {
                         launcher.launch("image/*")
+                    }
+                    .let { modifier ->
+                        if (imageUri.value == null) {
+                            modifier.padding(4.dp)
+                        } else {
+                            modifier
+                        }
                     },
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.width(30.dp))
-            Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+            Column(
+                modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
+            ) {
                 TextView(text = Prefs.getString(Constants.USERNAME))
                 TextView(text = Prefs.getString(Constants.PHONE))
             }

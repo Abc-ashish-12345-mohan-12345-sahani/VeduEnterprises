@@ -41,3 +41,14 @@ val DeepPurple40 = Color(0xFF5C3D99)
 // Additional Blues
 val LightBlue80 = Color(0xFFB3E5FC)
 val LightBlue40 = Color(0xFF4A90E2)
+
+val Gray10 = Color(0xFFEFEFEF)
+val Gray20 = Color(0xFFDADADA)
+val Gray30 = Color(0xFFBEBEBE)
+val Gray40 = Color(0xFFA1A1A1)
+val Gray50 = Color(0xFF808080)
+val Gray60 = Color(0xFF666666)
+val Gray70 = Color(0xFF4D4D4D)
+val Gray80 = Color(0xFF333333)
+val Gray90 = Color(0xFF1A1A1A)
+

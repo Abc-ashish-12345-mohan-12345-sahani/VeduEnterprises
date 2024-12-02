@@ -294,6 +294,9 @@ fun ModernLoginPage(
                                                 context.getString(R.string.sign_up_successful_please_log_in)
                                             )
                                             isSignIn = true
+                                            viewModel.saveUserData(
+                                                context, username, phoneNumber, authHelper
+                                            )
                                         }
                                     }
                                 }

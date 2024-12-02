@@ -1,12 +1,16 @@
 package vedu_enterprises.application.ViewModels
 
+import android.content.Context
+import android.net.Uri
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.launch
 import vedu_enterprises.application.Helper.FirebaseAuthHelper
+import vedu_enterprises.application.ui.theme.Constants
 
 class AuthenticationViewModel() : ViewModel() {
 
@@ -95,6 +99,66 @@ class AuthenticationViewModel() : ViewModel() {
             }
         }
     }
-}
 
+    fun saveUserData(
+        context: Context,
+        name: String,
+        phoneNumber: String,
+        authHelper: FirebaseAuthHelper
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                val currentUser = _user.value
+                if (currentUser != null) {
+                    val userId = currentUser.uid
+                    val userData = mapOf(
+                        "name" to name,
+                        "phoneNumber" to phoneNumber,
+                        "email" to currentUser.email
+                    )
+                    authHelper.saveUserData(context, userId, userData)
+                    _errorMessage.value = null
+                } else {
+                    _errorMessage.value = "No user is logged in"
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Failed to save user data"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun uploadUserImage(
+        context: Context,
+        imageUri: Uri,
+        authHelper: FirebaseAuthHelper,
+        onSuccess: (String) -> Unit, onError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                val currentUser = _user.value
+                if (currentUser != null) {
+                    val userId = currentUser.uid
+                    authHelper.uploadImage(context, userId, imageUri) { imageUrl ->
+                        onSuccess(imageUrl)
+                        onError("Error")
+                    }
+                } else {
+                    _errorMessage.value = "No user is logged in"
+                    Prefs.getString(Constants.USER_IMAGE, imageUri.toString())
+                }
+            } catch (e: Exception) {
+                _errorMessage.value = e.message ?: "Failed to upload user image"
+            } finally {
+                _isLoading.value = false
+                Prefs.getString(Constants.USER_IMAGE, imageUri.toString())
+            }
+        }
+    }
+}
 

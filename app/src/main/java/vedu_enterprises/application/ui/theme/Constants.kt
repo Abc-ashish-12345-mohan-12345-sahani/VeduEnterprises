@@ -5,4 +5,5 @@ object Constants {
     const val USERNAME = "userName"
     const val PHONE = "phone"
     const val USER = "user"
+    const val USER_IMAGE = "userImage"
 }

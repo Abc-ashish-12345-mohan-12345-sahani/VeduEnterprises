@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +30,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.pixplicity.easyprefs.library.Prefs
 import vedu_enterprises.application.R
 import vedu_enterprises.application.dataClass.NavigationItem
@@ -64,6 +67,7 @@ class MainActivity : ComponentActivity() {
 fun HomeScreen() {
     val context = LocalContext.current
     val username = Prefs.getString(Constants.USERNAME)
+    val imageUrl = remember { Prefs.getString(Constants.USER_IMAGE) }
 
     Column(
         modifier = Modifier
@@ -101,11 +105,24 @@ fun HomeScreen() {
                         .clip(CircleShape)
                         .background(Color.White)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.PersonOutline,
-                        contentDescription = "Profile",
-                        tint = Color.Black
-                    )
+                    if (imageUrl.isNullOrEmpty()) {
+                        Icon(
+                            imageVector = Icons.Default.PersonOutline,
+                            contentDescription = "Profile",
+                            tint = Color.Black
+                        )
+                    } else {
+                        AsyncImage(
+                            model = imageUrl,
+                            contentDescription = "Profile",
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(CircleShape)
+                                .border(2.dp, Color.Black, CircleShape),
+                            placeholder = painterResource(R.drawable.baseline_person_24),
+                            error = painterResource(R.drawable.baseline_person_24)
+                        )
+                    }
                 }
                 Column(modifier = Modifier.padding(start = 5.dp)) {
                     Text(
