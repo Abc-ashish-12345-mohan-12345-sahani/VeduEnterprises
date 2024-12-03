@@ -6,4 +6,6 @@ object Constants {
     const val PHONE = "phone"
     const val USER = "user"
     const val USER_IMAGE = "userImage"
+    const val ITEM_NAME = "itemName"
+    const val ITEM_IMAGE = "itemImage"
 }

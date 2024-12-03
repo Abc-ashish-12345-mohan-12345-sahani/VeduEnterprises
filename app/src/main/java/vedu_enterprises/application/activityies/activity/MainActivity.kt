@@ -1,5 +1,6 @@
 package vedu_enterprises.application.activityies.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -152,7 +153,7 @@ fun HomeScreen() {
             )
         }
         Spacer(modifier = Modifier.height(50.dp))
-        MetroNavigationScreen()
+        MetroNavigationScreen(context)
     }
 }
 
@@ -165,16 +166,16 @@ fun GreetingPreview() {
 }
 
 @Composable
-fun MetroNavigationScreen() {
+fun MetroNavigationScreen(context: Context) {
     val items = listOf(
         NavigationItem(
-            "Route Between\nStations", Color(0xFF64B5F6)
+            "Coffee Mug", Color(0xFF64B5F6), R.drawable.coffee_mug
         ), NavigationItem(
-            "Fare Between\nStations", Color(0xFFFFB74D)
+            "Fare Between\nStations", Color(0xFFFFB74D), R.drawable.coffee_mug
         ), NavigationItem(
-            "First/Last Train\nTimings", Color(0xFFF48FB1)
+            "First/Last Train\nTimings", Color(0xFFF48FB1), R.drawable.coffee_mug
         ), NavigationItem(
-            "Gates, Directions\nand Station Info", Color(0xFF81C784)
+            "Gates, Directions\nand Station Info", Color(0xFF81C784), R.drawable.coffee_mug
         )
     )
 
@@ -184,15 +185,23 @@ fun MetroNavigationScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(items) { item ->
-            NavigationCard(item)
+            NavigationCard(context, item)
         }
     }
 
 }
 
 @Composable
-fun NavigationCard(item: NavigationItem) {
+fun NavigationCard(context: Context, item: NavigationItem) {
     Card(
+        onClick = {
+            context.startActivity(Intent(context, PreviewActivity::class.java).apply {
+                putExtra(Constants.ITEM_NAME, item.title).putExtra(
+                    Constants.ITEM_IMAGE,
+                    item.iconResId
+                )
+            })
+        },
         modifier = Modifier
             .height(280.dp)
             .fillMaxWidth(),
@@ -212,11 +221,11 @@ fun NavigationCard(item: NavigationItem) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = item.iconResId),
                 contentDescription = "Image description",
                 modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(90.dp)
+                    .clip(RoundedCornerShape(5.dp))
             )
             Text(
                 text = item.title,
