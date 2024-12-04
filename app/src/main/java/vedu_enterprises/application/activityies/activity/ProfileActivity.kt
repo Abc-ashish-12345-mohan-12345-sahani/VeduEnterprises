@@ -10,6 +10,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -113,12 +114,26 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
     }
 
     Scaffold(topBar = {
-        TopAppBar(title = { Text(stringResource(R.string.profile), fontSize = 18.sp) },
-            navigationIcon = {
-                IconButton(onClick = { (context as? ComponentActivity)?.finish() }) {
+        TopAppBar(title = {
+            Text(
+                stringResource(R.string.profile), fontSize = 18.sp, modifier = Modifier.padding(
+                    start = 15.dp
+                )
+            )
+        }, navigationIcon = {
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
+                modifier = Modifier
+                    .size(35.dp)
+            ) {
+                IconButton(
+                    onClick = { (context as? ComponentActivity)?.finish() }
+                ) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                 }
-            })
+            }
+        }, modifier = Modifier.padding(start = 10.dp))
     }) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -294,7 +309,7 @@ fun ShowCard(context: Context, viewModel: AuthenticationViewModel, authHelper: F
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             containerColor = Gray10
-        ),
+        ), border = BorderStroke(1.dp, Color.Black),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         )

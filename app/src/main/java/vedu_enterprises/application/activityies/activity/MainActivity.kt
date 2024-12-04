@@ -24,11 +24,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PersonOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -136,11 +138,21 @@ fun HomeScreen() {
                         text = username, fontSize = 16.sp, fontWeight = FontWeight.Bold
                     )
                 }
+                Spacer(modifier = Modifier.weight(1f))
+                Surface(
+                    shape = RoundedCornerShape(15.dp),
+                    color = Color.White,
+                    modifier = Modifier.size(45.dp),
+                ) {
+                    IconButton(
+                        onClick = { (context as? ComponentActivity)?.finish() }
+                    ) {
+                        Icon(Icons.Default.Notifications, "notification")
+                    }
+                }
             }
         }
-        Column(
-            modifier = Modifier.padding(top = 20.dp)
-        ) {
+        Column {
             Text(
                 text = stringResource(R.string.let_s_make),
                 fontSize = 24.sp,
@@ -203,8 +215,7 @@ fun NavigationCard(context: Context, item: NavigationItem) {
             })
         },
         modifier = Modifier
-            .height(280.dp)
-            .fillMaxWidth(),
+            .height(280.dp),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = item.backgroundColor
@@ -218,13 +229,13 @@ fun NavigationCard(context: Context, item: NavigationItem) {
                 .padding(16.dp)
                 .fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
             Image(
                 painter = painterResource(id = item.iconResId),
                 contentDescription = "Image description",
                 modifier = Modifier
-                    .size(90.dp)
+                    .size(180.dp)
                     .clip(RoundedCornerShape(5.dp))
             )
             Text(
@@ -232,8 +243,7 @@ fun NavigationCard(context: Context, item: NavigationItem) {
                 color = Color.White,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 8.dp)
+                textAlign = TextAlign.Center
             )
         }
     }
