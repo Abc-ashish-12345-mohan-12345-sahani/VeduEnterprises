@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Delete
@@ -44,13 +43,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -88,15 +85,18 @@ class ProfileActivity : ComponentActivity() {
             val authHelper = FirebaseAuthHelper()
             val authenticationViewModel: AuthenticationViewModel = viewModel()
             VeduEnterprisesTheme {
-                ProfileScreen(authenticationViewModel, authHelper)
+                ProfileScreen(authenticationViewModel, authHelper, this)
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper) {
+fun ProfileScreen(
+    viewModel: AuthenticationViewModel,
+    authHelper: FirebaseAuthHelper,
+    activity: ComponentActivity
+) {
     val context = LocalContext.current
     val showDialog = remember { mutableStateOf(false) }
 
@@ -114,26 +114,7 @@ fun ProfileScreen(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHe
     }
 
     Scaffold(topBar = {
-        TopAppBar(title = {
-            Text(
-                stringResource(R.string.profile), fontSize = 18.sp, modifier = Modifier.padding(
-                    start = 15.dp
-                )
-            )
-        }, navigationIcon = {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
-                modifier = Modifier
-                    .size(35.dp)
-            ) {
-                IconButton(
-                    onClick = { (context as? ComponentActivity)?.finish() }
-                ) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
-                }
-            }
-        }, modifier = Modifier.padding(start = 10.dp))
+        ShowHeader(heading = "Profile", activity = activity)
     }) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -285,7 +266,10 @@ fun DeleteAccountDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 @Composable
 fun GreetingPreview3() {
     VeduEnterprisesTheme {
-        ProfileScreen(AuthenticationViewModel(), FirebaseAuthHelper())
+        ProfileScreen(
+            AuthenticationViewModel(),
+            FirebaseAuthHelper(),
+            activity = object : ComponentActivity() {})
     }
 }
 

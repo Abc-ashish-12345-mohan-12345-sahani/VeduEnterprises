@@ -1,6 +1,7 @@
 package vedu_enterprises.application.activityies.activity
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,13 +29,24 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import vedu_enterprises.application.ui.theme.LightBlue80
 
 @Composable
@@ -175,4 +187,63 @@ fun ShowHeader(heading: String, activity: ComponentActivity) {
     }, modifier = Modifier.padding(start = 10.dp)
     )
 }
+
+@Composable
+fun ShowTextView(
+    text: String,
+    color: Color,
+    fontSize: TextUnit,
+    isBold: Boolean,
+    topPadding: Dp,
+    bottomPadding: Dp,
+    rightPadding: Dp,
+    leftPadding: Dp,
+) {
+    Text(
+        text = text,
+        color = color,
+        fontSize = fontSize,
+        fontWeight = if (isBold) FontWeight.Bold else FontWeight.Normal,
+        fontStyle = FontStyle.Italic,
+        modifier = Modifier.padding(
+            start = leftPadding, top = topPadding, end = rightPadding, bottom = bottomPadding
+        )
+    )
+}
+
+
+@Composable
+fun FadeInOutText(text: String) {
+    var visible by remember { mutableStateOf(true) }
+    val alpha by animateFloatAsState(targetValue = if (visible) 1f else 0f)
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            visible = !visible
+            delay(1000)
+        }
+    }
+
+    Text(
+        text = text, modifier = Modifier.alpha(alpha)
+    )
+}
+
+@Composable
+fun ScaleText(text: String) {
+    var big by remember { mutableStateOf(true) }
+    val scale by animateFloatAsState(targetValue = if (big) 1.5f else 1f)
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            big = !big
+            delay(1000)
+        }
+    }
+
+    Text(
+        text = text, modifier = Modifier.scale(scale), fontSize = 20.sp
+    )
+}
+
 

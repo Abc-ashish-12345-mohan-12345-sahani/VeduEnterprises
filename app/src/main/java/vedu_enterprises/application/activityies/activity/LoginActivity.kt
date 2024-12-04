@@ -10,6 +10,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -47,10 +48,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -64,6 +66,7 @@ import vedu_enterprises.application.Helper.FirebaseAuthHelper
 import vedu_enterprises.application.R
 import vedu_enterprises.application.ViewModels.AuthenticationViewModel
 import vedu_enterprises.application.ui.theme.Constants
+import vedu_enterprises.application.ui.theme.Gray30
 import vedu_enterprises.application.ui.theme.Utils
 import vedu_enterprises.application.ui.theme.VeduEnterprisesTheme
 
@@ -110,6 +113,12 @@ fun ModernLoginPage(
     Surface(
         modifier = Modifier.fillMaxSize(), color = Color(0xFFC4EFB1)
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.pexels),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,17 +126,20 @@ fun ModernLoginPage(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(
+            ShowTextView(
                 text = if (isSignIn) stringResource(R.string.welcome_back) else stringResource(R.string.create_account),
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
                 color = Color.Black,
-                modifier = Modifier.padding(bottom = 32.dp)
+                fontSize = 32.sp,
+                isBold = true,
+                topPadding = 0.dp,
+                bottomPadding = 32.dp,
+                rightPadding = 0.dp,
+                leftPadding = 0.dp
             )
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White)
+                colors = CardDefaults.cardColors(containerColor = Gray30.copy(alpha = 0.6f))
             ) {
                 Column(
                     modifier = Modifier
@@ -135,7 +147,6 @@ fun ModernLoginPage(
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Username
                     AnimatedVisibility(
                         visible = !isSignIn,
                         enter = expandVertically() + fadeIn(),
@@ -157,7 +168,6 @@ fun ModernLoginPage(
                             )
                         )
                     }
-                    // User Phone Number
                     AnimatedVisibility(
                         visible = !isSignIn,
                         enter = expandVertically() + fadeIn(),
@@ -180,7 +190,6 @@ fun ModernLoginPage(
                         )
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    // User Email
                     OutlinedTextField(
                         value = email,
                         onValueChange = { email = it },
@@ -195,7 +204,6 @@ fun ModernLoginPage(
                         )
                     )
                     Spacer(modifier = Modifier.height(16.dp))
-                    // Password
                     OutlinedTextField(
                         value = password,
                         onValueChange = { password = it },
@@ -218,13 +226,11 @@ fun ModernLoginPage(
                             keyboardType = KeyboardType.Password, imeAction = ImeAction.Done
                         )
                     )
-                    // Confirm Password
                     AnimatedVisibility(
                         visible = !isSignIn,
                         enter = expandVertically() + fadeIn(),
                         exit = shrinkVertically() + fadeOut()
                     ) {
-                        // Confirm Password
                         OutlinedTextField(
                             value = confirmPassword,
                             onValueChange = { confirmPassword = it },

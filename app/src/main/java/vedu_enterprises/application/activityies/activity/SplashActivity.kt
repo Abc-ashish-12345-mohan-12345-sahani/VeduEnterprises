@@ -7,32 +7,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.pixplicity.easyprefs.library.Prefs
 import kotlinx.coroutines.delay
 import vedu_enterprises.application.R
@@ -54,11 +40,8 @@ class SplashActivity : ComponentActivity() {
 @Composable
 fun SplashScreen() {
     val context = LocalContext.current
-    val isTextVisible = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        delay(1000)
-        isTextVisible.value = true
         delay(2000)
         moveToNextPage(context)
     }
@@ -73,25 +56,7 @@ fun SplashScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.Android,
-                contentDescription = "App Icon",
-                tint = Color.White,
-                modifier = Modifier.size(100.dp)
-            )
-
-            AnimatedVisibility(
-                visible = isTextVisible.value,
-                enter = fadeIn(animationSpec = tween(durationMillis = 1000))
-            ) {
-                Text(
-                    text = context.getString(R.string.app_name),
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 100.dp)
-                )
-            }
+            ScaleText(text = context.getString(R.string.app_name))
         }
     }
 }
@@ -106,7 +71,7 @@ fun SplashScreenPreview() {
 
 private fun moveToNextPage(context: Context) {
     val intent = if (Prefs.getBoolean(Constants.IS_LOGGED_IN, false)) {
-        Intent(context, MainActivity::class.java)
+        Intent(context, LoginActivity::class.java)
     } else {
         Intent(context, LoginActivity::class.java)
     }
