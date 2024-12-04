@@ -1,5 +1,6 @@
 package vedu_enterprises.application.activityies.activity
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,16 +10,23 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
 fun BillDetails() {
@@ -34,22 +43,18 @@ fun BillDetails() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        // Section Title
         Text(
             text = "Bill details",
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold
         )
         Spacer(modifier = Modifier.height(8.dp))
-
-        // Items total
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.List, // Replace with custom icon if needed
+                    imageVector = Icons.Default.List,
                     contentDescription = "Items"
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -57,7 +62,9 @@ fun BillDetails() {
                 Spacer(modifier = Modifier.width(8.dp))
                 Box(
                     modifier = Modifier
-                        .background(Color(0xFFDCEEFF), shape = RoundedCornerShape(4.dp))
+                        .background(
+                            Color(0xFFDCEEFF), shape = RoundedCornerShape(4.dp)
+                        )
                         .padding(horizontal = 8.dp, vertical = 2.dp)
                 ) {
                     Text(
@@ -68,21 +75,18 @@ fun BillDetails() {
                 }
             }
             Text(
-                text = "₹1,504 ₹1,247",
+                text = "₹1,504",
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.End
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
-
-        // Delivery charge
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.DirectionsBike, // Replace with delivery icon
+                    imageVector = Icons.Default.DirectionsBike,
                     contentDescription = "Delivery"
                 )
                 Spacer(modifier = Modifier.width(8.dp))
@@ -95,30 +99,23 @@ fun BillDetails() {
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
-
-        // Handling charge
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.ShoppingBag, // Replace with bag icon
+                    imageVector = Icons.Default.ShoppingBag,
                     contentDescription = "Handling"
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Handling charge")
             }
             Text(
-                text = "₹2",
-                style = MaterialTheme.typography.bodyMedium
+                text = "₹2", style = MaterialTheme.typography.bodyMedium
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-
         Divider(thickness = 1.dp)
-
-        // Grand total
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,14 +133,13 @@ fun BillDetails() {
                 fontWeight = FontWeight.Bold
             )
         }
-        Divider(thickness = 1.dp)
-
-        // Savings
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color(0xFFDCEEFF), shape = RoundedCornerShape(8.dp))
-                .padding(16.dp)
+                .padding(
+                    30.dp
+                )
         ) {
             Column {
                 Text(
@@ -159,5 +155,28 @@ fun BillDetails() {
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ShowHeader(heading: String, activity: ComponentActivity) {
+    TopAppBar(title = {
+        Text(
+            heading,
+            fontSize = 18.sp,
+            modifier = Modifier.padding(start = 15.dp)
+        )
+    }, navigationIcon = {
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.2f),
+            modifier = Modifier.size(35.dp)
+        ) {
+            IconButton(onClick = { activity.finish() }) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+            }
+        }
+    }, modifier = Modifier.padding(start = 10.dp)
+    )
 }
 
