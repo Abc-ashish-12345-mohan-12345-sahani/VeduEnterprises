@@ -113,7 +113,7 @@ fun BillDetails() {
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        Divider(thickness = 1.dp)
+        Divider(thickness = 2.dp)
         Row(
             modifier = Modifier
                 .fillMaxWidth()

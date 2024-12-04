@@ -43,4 +43,5 @@
     <string name="notification_preferences">"Notification preferences"</string>
     <string name="profile_image">"Profile Image"</string>
     <string name="title_activity_checkout">CheckoutActivity</string>
+    <string name="proceed_to_pay">Proceed to Pay</string>
 </resources>
