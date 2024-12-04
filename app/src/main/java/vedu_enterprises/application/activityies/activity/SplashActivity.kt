@@ -71,7 +71,7 @@ fun SplashScreenPreview() {
 
 private fun moveToNextPage(context: Context) {
     val intent = if (Prefs.getBoolean(Constants.IS_LOGGED_IN, false)) {
-        Intent(context, LoginActivity::class.java)
+        Intent(context, MainActivity::class.java)
     } else {
         Intent(context, LoginActivity::class.java)
     }

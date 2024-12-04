@@ -36,9 +36,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
+import vedu_enterprises.application.R
 import vedu_enterprises.application.ui.theme.LightBlue80
 
 @Composable
@@ -198,7 +200,20 @@ fun ShowTextView(
     bottomPadding: Dp,
     rightPadding: Dp,
     leftPadding: Dp,
+    font: Int
 ) {
+    val robotoBoldFont = when (font) {
+        1 -> FontFamily(Font(R.font.open_sans_semibold))
+        2 -> FontFamily(Font(R.font.poppin_ssemi_bold))
+        3 -> FontFamily(Font(R.font.poppins_bold))
+        4 -> FontFamily(Font(R.font.poppins_extra_bold))
+        5 -> FontFamily(Font(R.font.poppins_light))
+        6 -> FontFamily(Font(R.font.poppins_regular))
+        7 -> FontFamily(Font(R.font.raleway_bold))
+        8 -> FontFamily(Font(R.font.roboto_bold))
+        9 -> FontFamily(Font(R.font.roboto_regular))
+        else -> FontFamily(Font(R.font.roboto_regular))
+    }
     Text(
         text = text,
         color = color,
@@ -207,25 +222,8 @@ fun ShowTextView(
         fontStyle = FontStyle.Italic,
         modifier = Modifier.padding(
             start = leftPadding, top = topPadding, end = rightPadding, bottom = bottomPadding
-        )
-    )
-}
-
-
-@Composable
-fun FadeInOutText(text: String) {
-    var visible by remember { mutableStateOf(true) }
-    val alpha by animateFloatAsState(targetValue = if (visible) 1f else 0f)
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            visible = !visible
-            delay(1000)
-        }
-    }
-
-    Text(
-        text = text, modifier = Modifier.alpha(alpha)
+        ),
+        fontFamily = robotoBoldFont
     )
 }
 
@@ -233,6 +231,7 @@ fun FadeInOutText(text: String) {
 fun ScaleText(text: String) {
     var big by remember { mutableStateOf(true) }
     val scale by animateFloatAsState(targetValue = if (big) 1.5f else 1f)
+    val robotoBoldFont = FontFamily(Font(R.font.poppins_bold))
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -242,7 +241,7 @@ fun ScaleText(text: String) {
     }
 
     Text(
-        text = text, modifier = Modifier.scale(scale), fontSize = 20.sp
+        text = text, modifier = Modifier.scale(scale), fontSize = 20.sp, fontFamily = robotoBoldFont
     )
 }
 

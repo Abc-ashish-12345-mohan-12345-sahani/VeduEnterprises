@@ -134,7 +134,8 @@ fun ModernLoginPage(
                 topPadding = 0.dp,
                 bottomPadding = 32.dp,
                 rightPadding = 0.dp,
-                leftPadding = 0.dp
+                leftPadding = 0.dp,
+                2
             )
             Card(
                 modifier = Modifier.fillMaxWidth(),
