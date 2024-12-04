@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import vedu_enterprises.application.ui.theme.LightBlue80
 
 @Composable
 fun BillDetails() {
@@ -54,8 +55,7 @@ fun BillDetails() {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.List,
-                    contentDescription = "Items"
+                    imageVector = Icons.Default.List, contentDescription = "Items"
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Items total")
@@ -86,8 +86,7 @@ fun BillDetails() {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.DirectionsBike,
-                    contentDescription = "Delivery"
+                    imageVector = Icons.Default.DirectionsBike, contentDescription = "Delivery"
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Delivery charge")
@@ -104,8 +103,7 @@ fun BillDetails() {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector = Icons.Default.ShoppingBag,
-                    contentDescription = "Handling"
+                    imageVector = Icons.Default.ShoppingBag, contentDescription = "Handling"
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Handling charge")
@@ -136,9 +134,9 @@ fun BillDetails() {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFDCEEFF), shape = RoundedCornerShape(8.dp))
+                .background(LightBlue80.copy(alpha = 0.8f), shape = RoundedCornerShape(8.dp))
                 .padding(
-                    30.dp
+                    10.dp
                 )
         ) {
             Column {
@@ -150,7 +148,7 @@ fun BillDetails() {
                 Text(
                     text = "Includes ₹25 savings through free delivery",
                     style = MaterialTheme.typography.labelSmall,
-                    color = Color.Gray
+                    color = Color.Black
                 )
             }
         }
@@ -162,9 +160,7 @@ fun BillDetails() {
 fun ShowHeader(heading: String, activity: ComponentActivity) {
     TopAppBar(title = {
         Text(
-            heading,
-            fontSize = 18.sp,
-            modifier = Modifier.padding(start = 15.dp)
+            heading, fontSize = 18.sp, modifier = Modifier.padding(start = 15.dp)
         )
     }, navigationIcon = {
         Surface(
