@@ -111,7 +111,7 @@ fun ModernLoginPage(
     }
 
     Surface(
-        modifier = Modifier.fillMaxSize(), color = Color(0xFFC4EFB1)
+        modifier = Modifier.fillMaxSize(), color = Utils.getRandomLightColor()
     ) {
         Image(
             painter = painterResource(id = R.drawable.pexels),
@@ -288,10 +288,6 @@ fun ModernLoginPage(
                                             Prefs.putString(Constants.USER, user.toString())
                                             Prefs.putString(Constants.USERNAME, username)
                                             Prefs.putString(Constants.PHONE, phoneNumber)
-                                            Utils.showToast(
-                                                context,
-                                                context.getString(R.string.welcome, username)
-                                            )
                                             Prefs.putBoolean(Constants.IS_LOGGED_IN, true)
                                         }
                                     } else {
