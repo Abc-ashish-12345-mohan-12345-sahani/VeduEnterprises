@@ -17,12 +17,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingBag
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -34,8 +39,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -50,6 +57,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -260,7 +268,7 @@ fun ScaleText(text: String) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun BottomSheetScreen(showBottomSheet: MutableState<Boolean>) {
+fun BottomSheetScreen(showBottomSheet: MutableState<Boolean>, onClick: () -> Unit) {
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -338,7 +346,7 @@ fun BottomSheetScreen(showBottomSheet: MutableState<Boolean>) {
                                     .padding(16.dp)
                             ) {
                                 Button(
-                                    onClick = { /* Handle Cancel */ },
+                                    onClick = { showBottomSheet.value = false },
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(8.dp),
@@ -349,7 +357,7 @@ fun BottomSheetScreen(showBottomSheet: MutableState<Boolean>) {
                                     )
                                 }
                                 Button(
-                                    onClick = { },
+                                    onClick = { onClick },
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(8.dp),
@@ -393,8 +401,7 @@ fun SwipeableSheet() {
         sheetPeekHeight = 0.dp,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = Modifier.fillMaxSize()
         ) {
             Surface(
                 modifier = Modifier
@@ -486,6 +493,70 @@ fun SwipeableSheet() {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun DeleteAccountDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    AlertDialog(onDismissRequest = onDismiss, title = {
+        Text(
+            stringResource(R.string.delete_account),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }, text = {
+        Text(
+            stringResource(R.string.are_you_sure_you_want_to_delete_your_account_this_action_cannot_be_undone),
+            fontSize = 16.sp
+        )
+    }, confirmButton = {
+        TextButton(onClick = onConfirm) {
+            Text("Delete", color = MaterialTheme.colorScheme.error)
+        }
+    }, dismissButton = {
+        TextButton(onClick = onDismiss) {
+            Text("Cancel", color = MaterialTheme.colorScheme.onSurface)
+        }
+    }, icon = {
+        Icon(
+            Icons.Default.Warning,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.error,
+            modifier = Modifier.size(40.dp)
+        )
+    })
+}
+
+@Composable
+fun ShowSnackBar() {
+    val snackbarHostState = remember { SnackbarHostState() }
+    var showSnackbar by remember { mutableStateOf(false) }
+
+    Scaffold(snackbarHost = {
+        SnackbarHost(
+            hostState = snackbarHostState, modifier = Modifier.padding(8.dp)
+        )
+    }, content = { paddingValues ->
+        Column(
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            Button(
+                onClick = { showSnackbar = true }, modifier = Modifier.padding(16.dp)
+            ) {
+                Text(text = "Show Snackbar")
+            }
+        }
+    })
+
+    if (showSnackbar) {
+        LaunchedEffect(snackbarHostState) {
+            val result = snackbarHostState.showSnackbar(
+                message = "This is a snackbar!",
+                actionLabel = "Undo",
+            )
+            showSnackbar = false
         }
     }
 }

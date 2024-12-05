@@ -37,8 +37,6 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Shield
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -46,9 +44,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -109,12 +105,14 @@ fun ProfileScreen(
             item { ShowCard(context, viewModel, authHelper) }
             item { SectionTitle() }
             item {
-                MenuItemRow(icon = Icons.Default.Share,
+                MenuItemRow(
+                    icon = Icons.Default.Share,
                     stringResource(R.string.share_app),
                     onClick = {})
             }
             item {
-                MenuItemRow(icon = Icons.Default.Info,
+                MenuItemRow(
+                    icon = Icons.Default.Info,
                     stringResource(R.string.about_us),
                     onClick = {})
             }
@@ -134,7 +132,8 @@ fun ProfileScreen(
                     onClick = { })
             }
             item {
-                MenuItemRow(icon = Icons.Default.Phone,
+                MenuItemRow(
+                    icon = Icons.Default.Phone,
                     stringResource(R.string.contact_us),
                     onClick = { })
             }
@@ -147,7 +146,9 @@ fun ProfileScreen(
     }
 
     if (showBottomSheet.value) {
-        BottomSheetScreen(showBottomSheet = showBottomSheet)
+        BottomSheetScreen(showBottomSheet = showBottomSheet, onClick = {
+            deleteAccount(viewModel, authHelper, context)
+        })
     }
 }
 
@@ -234,40 +235,15 @@ fun logOut(viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper, c
     }
 }
 
-fun deleteAccount(showDialog: MutableState<Boolean>) {
-    showDialog.value = true
-}
-
-@Composable
-fun DeleteAccountDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
-    AlertDialog(onDismissRequest = onDismiss, title = {
-        Text(
-            stringResource(R.string.delete_account),
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }, text = {
-        Text(
-            stringResource(R.string.are_you_sure_you_want_to_delete_your_account_this_action_cannot_be_undone),
-            fontSize = 16.sp
-        )
-    }, confirmButton = {
-        TextButton(onClick = onConfirm) {
-            Text("Delete", color = MaterialTheme.colorScheme.error)
+fun deleteAccount(
+    viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper, context: Context
+) {
+    viewModel.deleteAccount(authHelper) {
+        val intent = Intent(context, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-    }, dismissButton = {
-        TextButton(onClick = onDismiss) {
-            Text("Cancel", color = MaterialTheme.colorScheme.onSurface)
-        }
-    }, icon = {
-        Icon(
-            Icons.Default.Warning,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.error,
-            modifier = Modifier.size(40.dp)
-        )
-    })
+        context.startActivity(intent)
+    }
 }
 
 @Preview(showBackground = true)
