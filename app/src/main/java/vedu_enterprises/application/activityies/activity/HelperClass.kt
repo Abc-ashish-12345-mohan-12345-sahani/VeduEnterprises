@@ -262,69 +262,77 @@ fun BottomSheetScreen() {
     )
     var showSheet by remember { mutableStateOf(true) }
 
+    // Show the bottom sheet if `showSheet` is true
+    LaunchedEffect(showSheet) {
+        if (showSheet) {
+            bottomSheetState.show()
+        } else {
+            bottomSheetState.hide()
+        }
+    }
+
     ModalBottomSheet(
         onDismissRequest = { showSheet = false },
         sheetState = bottomSheetState,
         containerColor = Color.Transparent
     ) {
-        Show(showSheet) { showSheet = it }
-    }
-}
-
-@Composable
-fun Show(showSheet: Boolean, onDismiss: (Boolean) -> Unit) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(350.dp), color = Color.Transparent
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(350.dp),
+            color = Color.Transparent
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
             ) {
-                Surface(
-                    shape = CircleShape,
-                    modifier = Modifier.padding(top = 5.dp),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
                 ) {
-                    IconButton(onClick = { onDismiss(false) }) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Cancel",
-                            tint = Color.Black
-                        )
-                    }
-                }
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(top = 15.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(
-                        topStart = 20.dp, topEnd = 20.dp, bottomStart = 0.dp, bottomEnd = 0.dp
-                    )
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Bottom
+                    Surface(
+                        shape = CircleShape,
+                        modifier = Modifier.padding(top = 5.dp),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     ) {
-                        Button(
-                            onClick = { },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(80.dp)
-                                .padding(15.dp),
-                            shape = RoundedCornerShape(12.dp)
+                        IconButton(onClick = { showSheet = false }) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Cancel",
+                                tint = Color.Black
+                            )
+                        }
+                    }
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                            .padding(top = 15.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(
+                            topStart = 20.dp, topEnd = 20.dp, bottomStart = 0.dp, bottomEnd = 0.dp
+                        )
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Bottom
                         ) {
-                            Text(text = stringResource(R.string.proceed_to_pay), fontSize = 18.sp)
+                            Button(
+                                onClick = { },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(80.dp)
+                                    .padding(15.dp),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.proceed_to_pay),
+                                    fontSize = 18.sp
+                                )
+                            }
                         }
                     }
                 }
