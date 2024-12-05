@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.DirectionsBike
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.ShoppingBag
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -57,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import vedu_enterprises.application.R
+import vedu_enterprises.application.ui.theme.Green
 import vedu_enterprises.application.ui.theme.LightBlue80
 
 @Composable
@@ -278,8 +280,7 @@ fun BottomSheetScreen() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp),
-            color = Color.Transparent
+                .height(250.dp), color = Color.Transparent
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
@@ -349,8 +350,7 @@ fun BottomSheetScreen() {
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
                                     Text(
-                                        text = "Cancel",
-                                        fontSize = 16.sp
+                                        text = "Cancel", fontSize = 16.sp
                                     )
                                 }
 
@@ -363,8 +363,7 @@ fun BottomSheetScreen() {
                                     shape = RoundedCornerShape(12.dp)
                                 ) {
                                     Text(
-                                        text = "Delete",
-                                        fontSize = 16.sp
+                                        text = "Delete", fontSize = 16.sp
                                     )
                                 }
                             }
@@ -373,5 +372,19 @@ fun BottomSheetScreen() {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun ShowButton(text: String, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Green)
+    ) {
+        Text(text = text, fontSize = 18.sp, color = Color.Black)
     }
 }

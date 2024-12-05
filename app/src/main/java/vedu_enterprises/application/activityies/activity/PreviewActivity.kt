@@ -22,8 +22,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,7 +48,6 @@ import androidx.compose.ui.unit.sp
 import vedu_enterprises.application.R
 import vedu_enterprises.application.activityies.activity.ui.theme.VeduEnterprisesTheme
 import vedu_enterprises.application.ui.theme.Constants
-import vedu_enterprises.application.ui.theme.LightBlue40
 
 class PreviewActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,25 +169,16 @@ fun Greeting(itemImage: Int, activity: ComponentActivity) {
                         }
                     }
                 }
-            }
-            Button(
-                onClick = {
-                    context.startActivity(Intent(context, CheckoutActivity::class.java))
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(20.dp)
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = LightBlue40
-                )
-            ) {
-                Text(
+                ShowButton(
                     text = stringResource(R.string.save),
-                    color = Color.White, fontSize = 18.sp
-                )
+                    onClick = {
+                        context.startActivity(
+                            Intent(
+                                context,
+                                CheckoutActivity::class.java
+                            )
+                        )
+                    })
             }
         }
     }
