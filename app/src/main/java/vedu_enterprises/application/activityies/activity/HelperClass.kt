@@ -549,14 +549,4 @@ fun ShowSnackBar() {
             }
         }
     })
-
-    if (showSnackbar) {
-        LaunchedEffect(snackbarHostState) {
-            val result = snackbarHostState.showSnackbar(
-                message = "This is a snackbar!",
-                actionLabel = "Undo",
-            )
-            showSnackbar = false
-        }
-    }
 }
