@@ -95,10 +95,6 @@ fun ProfileScreen(
     val context = LocalContext.current
     val showBottomSheet = remember { mutableStateOf(false) }
 
-    if (showBottomSheet.value) {
-        BottomSheetScreen(showBottomSheet = showBottomSheet)
-    }
-
     Scaffold(topBar = {
         ShowHeader(heading = "Profile", activity = activity)
     }) { paddingValues ->
@@ -148,6 +144,10 @@ fun ProfileScreen(
                     onClick = { showBottomSheet.value = true })
             }
         }
+    }
+
+    if (showBottomSheet.value) {
+        BottomSheetScreen(showBottomSheet = showBottomSheet)
     }
 }
 

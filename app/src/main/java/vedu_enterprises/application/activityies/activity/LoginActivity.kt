@@ -91,9 +91,9 @@ fun ModernLoginPage(
     val context = LocalContext.current
     var isSignIn by remember { mutableStateOf(true) }
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("123456") }
     var confirmPassword by remember { mutableStateOf("") }
-    var username by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("ashish.roadcast@gmail.com") }
     var phoneNumber by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var confirmPasswordVisible by remember {
