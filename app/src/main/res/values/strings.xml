@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VeduEnterprises</string>
+    <string name="app_name">MyApp</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="need_an_account_sign_up">Need an account? Sign Up</string>

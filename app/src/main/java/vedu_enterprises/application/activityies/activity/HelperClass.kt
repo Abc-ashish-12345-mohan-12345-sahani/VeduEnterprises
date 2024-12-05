@@ -46,7 +46,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -254,8 +253,8 @@ fun ScaleText(text: String) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun BottomSheetScreen() {
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
@@ -279,7 +278,7 @@ fun BottomSheetScreen() {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(350.dp),
+                .height(250.dp),
             color = Color.Transparent
         ) {
             Box(
@@ -318,20 +317,56 @@ fun BottomSheetScreen() {
                         Column(
                             modifier = Modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Bottom
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Button(
-                                onClick = { },
+                            // Text for "Delete Account"
+                            Text(
+                                text = "Delete Account",
+                                fontSize = 24.sp,
+                                modifier = Modifier.padding(top = 16.dp)
+                            )
+
+                            // Text for "Are you sure?"
+                            Text(
+                                text = "Are you sure?",
+                                fontSize = 18.sp,
+                                modifier = Modifier.padding(top = 8.dp)
+                            )
+
+                            // Row to place the Cancel and Delete buttons horizontally
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceEvenly,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(80.dp)
-                                    .padding(15.dp),
-                                shape = RoundedCornerShape(12.dp)
+                                    .padding(16.dp)
                             ) {
-                                Text(
-                                    text = stringResource(R.string.proceed_to_pay),
-                                    fontSize = 18.sp
-                                )
+                                // Cancel Button
+                                Button(
+                                    onClick = { /* Handle Cancel */ },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(8.dp),
+                                    shape = RoundedCornerShape(12.dp)
+                                ) {
+                                    Text(
+                                        text = "Cancel",
+                                        fontSize = 16.sp
+                                    )
+                                }
+
+                                // Delete Button
+                                Button(
+                                    onClick = { /* Handle Delete */ },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(8.dp),
+                                    shape = RoundedCornerShape(12.dp)
+                                ) {
+                                    Text(
+                                        text = "Delete",
+                                        fontSize = 16.sp
+                                    )
+                                }
                             }
                         }
                     }

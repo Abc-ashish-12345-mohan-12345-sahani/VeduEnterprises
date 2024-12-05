@@ -41,7 +41,6 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -60,7 +59,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -93,12 +91,11 @@ class ProfileActivity : ComponentActivity() {
 
 @Composable
 fun ProfileScreen(
-    viewModel: AuthenticationViewModel,
-    authHelper: FirebaseAuthHelper,
-    activity: ComponentActivity
+    viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper, activity: ComponentActivity
 ) {
     val context = LocalContext.current
     val showDialog = remember { mutableStateOf(false) }
+    val showBottomSheet = remember { mutableStateOf(false) }
 
     if (showDialog.value) {
         DeleteAccountDialog(onDismiss = { showDialog.value = false }, onConfirm = {
@@ -113,6 +110,10 @@ fun ProfileScreen(
         })
     }
 
+    if (showBottomSheet.value) {
+        BottomSheetScreen()
+    }
+
     Scaffold(topBar = {
         ShowHeader(heading = "Profile", activity = activity)
     }) { paddingValues ->
@@ -125,7 +126,7 @@ fun ProfileScreen(
         ) {
             item { ProfileHeader() }
             item { ShowCard(context, viewModel, authHelper) }
-            item { SectionTitle(stringResource(R.string.other_information)) }
+            item { SectionTitle() }
             item {
                 MenuItemRow(icon = Icons.Default.Share,
                     stringResource(R.string.share_app),
@@ -159,7 +160,7 @@ fun ProfileScreen(
             item {
                 MenuItemRow(icon = Icons.Default.Delete,
                     stringResource(R.string.delete_account),
-                    onClick = { deleteAccount(showDialog) })
+                    onClick = { showBottomSheet.value = true })
             }
         }
     }
@@ -167,19 +168,31 @@ fun ProfileScreen(
 
 @Composable
 fun ProfileHeader() {
-    Text(
-        stringResource(R.string.my_account),
+    ShowTextView(
+        text = stringResource(R.string.my_account),
+        color = Color.Black,
         fontSize = 24.sp,
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(vertical = 16.dp)
+        isBold = true,
+        topPadding = 5.dp,
+        bottomPadding = 10.dp,
+        rightPadding = 16.dp,
+        leftPadding = 0.dp,
+        font = 1
     )
 }
 
 @Composable
-fun SectionTitle(title: String) {
-    Spacer(modifier = Modifier.height(10.dp))
-    Text(
-        title, fontSize = 14.sp, color = Color.Black, modifier = Modifier.padding(vertical = 10.dp)
+fun SectionTitle() {
+    ShowTextView(
+        text = stringResource(R.string.other_information),
+        color = Color.Black,
+        fontSize = 16.sp,
+        isBold = false,
+        topPadding = 15.dp,
+        bottomPadding = 10.dp,
+        rightPadding = 10.dp,
+        leftPadding = 0.dp,
+        font = 2
     )
 }
 
@@ -206,7 +219,17 @@ fun MenuItemRow(icon: ImageVector, title: String, onClick: () -> Unit) {
                 ) {
                     Icon(imageVector = icon, contentDescription = null, Modifier.padding(8.dp))
                 }
-                Text(title, fontSize = 16.sp, fontFamily = FontFamily.SansSerif)
+                ShowTextView(
+                    text = title,
+                    color = Color.Black,
+                    fontSize = 16.sp,
+                    isBold = false,
+                    topPadding = 0.dp,
+                    bottomPadding = 0.dp,
+                    rightPadding = 0.dp,
+                    leftPadding = 0.dp,
+                    font = 1
+                )
             }
             Icon(
                 Icons.Default.ChevronRight,
@@ -266,8 +289,7 @@ fun DeleteAccountDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 @Composable
 fun GreetingPreview3() {
     VeduEnterprisesTheme {
-        ProfileScreen(
-            AuthenticationViewModel(),
+        ProfileScreen(AuthenticationViewModel(),
             FirebaseAuthHelper(),
             activity = object : ComponentActivity() {})
     }
@@ -293,7 +315,8 @@ fun ShowCard(context: Context, viewModel: AuthenticationViewModel, authHelper: F
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             containerColor = Gray10
-        ), border = BorderStroke(1.dp, Color.Black),
+        ),
+        border = BorderStroke(1.dp, Color.Black),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         )
@@ -328,7 +351,7 @@ fun ShowCard(context: Context, viewModel: AuthenticationViewModel, authHelper: F
             )
             Spacer(modifier = Modifier.width(30.dp))
             Column(
-                modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
+                modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top
             ) {
                 TextView(text = Prefs.getString(Constants.USERNAME))
                 TextView(text = Prefs.getString(Constants.PHONE))

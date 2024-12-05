@@ -153,15 +153,27 @@ fun HomeScreen() {
             }
         }
         Column {
-            Text(
+            ShowTextView(
                 text = stringResource(R.string.let_s_make),
+                color = Color.Black,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                isBold = true,
+                topPadding = 0.dp,
+                bottomPadding = 0.dp,
+                rightPadding = 0.dp,
+                leftPadding = 0.dp,
+                font = 2
             )
-            Text(
+            ShowTextView(
                 text = stringResource(R.string.something_creative),
+                color = Color.Black,
                 fontSize = 24.sp,
-                fontWeight = FontWeight.Bold
+                isBold = true,
+                topPadding = 0.dp,
+                bottomPadding = 0.dp,
+                rightPadding = 0.dp,
+                leftPadding = 0.dp,
+                font = 2
             )
         }
         Spacer(modifier = Modifier.height(50.dp))
