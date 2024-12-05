@@ -39,6 +39,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -257,15 +258,13 @@ fun ScaleText(text: String) {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun BottomSheetScreen() {
+fun BottomSheetScreen(showBottomSheet: MutableState<Boolean>) {
     val bottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
-    var showSheet by remember { mutableStateOf(true) }
 
-    // Show the bottom sheet if `showSheet` is true
-    LaunchedEffect(showSheet) {
-        if (showSheet) {
+    LaunchedEffect(showBottomSheet.value) {
+        if (showBottomSheet.value) {
             bottomSheetState.show()
         } else {
             bottomSheetState.hide()
@@ -273,7 +272,7 @@ fun BottomSheetScreen() {
     }
 
     ModalBottomSheet(
-        onDismissRequest = { showSheet = false },
+        onDismissRequest = { showBottomSheet.value = false },
         sheetState = bottomSheetState,
         containerColor = Color.Transparent
     ) {
@@ -295,7 +294,7 @@ fun BottomSheetScreen() {
                         modifier = Modifier.padding(top = 5.dp),
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
                     ) {
-                        IconButton(onClick = { showSheet = false }) {
+                        IconButton(onClick = { showBottomSheet.value = false }) {
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Cancel",
@@ -320,28 +319,22 @@ fun BottomSheetScreen() {
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            // Text for "Delete Account"
                             Text(
                                 text = "Delete Account",
                                 fontSize = 24.sp,
                                 modifier = Modifier.padding(top = 16.dp)
                             )
-
-                            // Text for "Are you sure?"
                             Text(
                                 text = "Are you sure?",
                                 fontSize = 18.sp,
                                 modifier = Modifier.padding(top = 8.dp)
                             )
-
-                            // Row to place the Cancel and Delete buttons horizontally
                             Row(
                                 horizontalArrangement = Arrangement.SpaceEvenly,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
                             ) {
-                                // Cancel Button
                                 Button(
                                     onClick = { /* Handle Cancel */ },
                                     modifier = Modifier
@@ -353,10 +346,8 @@ fun BottomSheetScreen() {
                                         text = "Cancel", fontSize = 16.sp
                                     )
                                 }
-
-                                // Delete Button
                                 Button(
-                                    onClick = { /* Handle Delete */ },
+                                    onClick = { },
                                     modifier = Modifier
                                         .weight(1f)
                                         .padding(8.dp),

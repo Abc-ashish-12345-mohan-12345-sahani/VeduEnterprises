@@ -72,7 +72,6 @@ import vedu_enterprises.application.R
 import vedu_enterprises.application.ViewModels.AuthenticationViewModel
 import vedu_enterprises.application.ui.theme.Constants
 import vedu_enterprises.application.ui.theme.Gray10
-import vedu_enterprises.application.ui.theme.Utils
 import vedu_enterprises.application.ui.theme.VeduEnterprisesTheme
 
 class ProfileActivity : ComponentActivity() {
@@ -94,24 +93,10 @@ fun ProfileScreen(
     viewModel: AuthenticationViewModel, authHelper: FirebaseAuthHelper, activity: ComponentActivity
 ) {
     val context = LocalContext.current
-    val showDialog = remember { mutableStateOf(false) }
     val showBottomSheet = remember { mutableStateOf(false) }
 
-    if (showDialog.value) {
-        DeleteAccountDialog(onDismiss = { showDialog.value = false }, onConfirm = {
-            showDialog.value = false
-            viewModel.deleteAccount(authHelper) {
-                Utils.showToast(context, "Account deleted successfully")
-                val intent = Intent(context, LoginActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                context.startActivity(intent)
-            }
-        })
-    }
-
     if (showBottomSheet.value) {
-        BottomSheetScreen()
+        BottomSheetScreen(showBottomSheet = showBottomSheet)
     }
 
     Scaffold(topBar = {
